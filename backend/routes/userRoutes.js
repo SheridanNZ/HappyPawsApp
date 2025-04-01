@@ -1,8 +1,11 @@
 const express = require("express");
 const router = express.Router();
-const { registerUser, loginUser, getUsers, createUser, updateUser, deleteUser, sendPassword, addProfileImage } = require("../controllers/userController");
-const { verifyToken } = require("../middleware/auth");
-const { uploadFile } = require("../middleware/uploads");
+const { registerUser, loginUser, getUsers, createUser, updateUser, deleteUser, sendPassword } = require("../controllers/userController");
+
+// Clear the cache for authMiddleware to ensure it's freshly loaded
+delete require.cache[require.resolve("../middleware/authMiddleware")];
+
+const { verifyToken } = require("../middleware/authMiddleware");
 
 // Get all users - protected route
 router.get('/', verifyToken, (req, res) => {
